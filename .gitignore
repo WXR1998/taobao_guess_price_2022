@@ -1,0 +1,7 @@
+/image/
+/sku_image/
+__pycache__/
+.idea/
+.vscode/
+**/tmp.html
+.DS_Store

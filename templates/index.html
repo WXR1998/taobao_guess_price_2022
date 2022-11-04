@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="style.css"/>
+        <title>淘宝猜价格</title>
+        <style>
+            body {text-align: center;}
+            table {margin: auto;}
+        </style>
+    </head>
+    <body>
+        <div id="content">
+            <table border=1>
+                {% for keyword in data %}
+                <tr>
+                    <td width="200px">
+                        <div>
+                            <img src="{{ data[keyword].img_src }}" width="{{ size }}" height="{{ size }}">
+                        </div>
+                        <div>
+                            <font size=5>
+                            {{ keyword }}
+                            </font>
+                        </div>
+                    </td>
+                    {% for s in data[keyword].sku_list %}
+                    <td>
+                        <div>
+                            <img src="{{ s.img_src }}" width="{{ size }}" height="{{ size }}">
+                        </div>
+                        <div>
+                            {{ s.title }}
+                            <br>
+                            <b><font size=4 color="red">
+                                {{ s.price }} 
+                            </font></b>
+                        </div>
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </body>
+</html>
