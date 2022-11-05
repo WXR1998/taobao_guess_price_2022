@@ -3,8 +3,29 @@ import os
 import cv2
 import logging
 import time
+import re
 
 import config
+
+def sku_name_filter(sku_name: str):
+    """
+    对某些sku的名称进行手工修改
+    """
+    if not sku_name.endswith(' '):
+        sku_name = sku_name + ' '
+
+    # k9 大概率是由 kg 误识别而来
+    sku_name = re.sub(r'k9[^\d]', lambda m: 'kg' + m.group(0)[-1], sku_name)
+    # m1 大概率是由 ml 误识别而来
+    sku_name = re.sub(r'm1[^\d]', lambda m: 'ml' + m.group(0)[-1], sku_name)
+    # GL/Gl/G1 大概率是由 6L 误识别而来
+    sku_name = re.sub(r'G[Ll1][^\d]', lambda m: '6L' + m.group(0)[-1], sku_name)
+    # 以1结尾的数字大概率是由 *L 误识别而来
+    sku_name = re.sub(r'(\d+?)1[^\d]', lambda m: m.group(0)[:-2] + 'L' + m.group(0)[-1], sku_name)
+    # 以9结尾的数字大概率是由 *g 误识别而来
+    sku_name = re.sub(r'(\d+?)9[^\d]', lambda m: m.group(0)[:-2] + 'g' + m.group(0)[-1], sku_name)
+
+    return sku_name.strip()
 
 def get_sku_list(path: str, prob_thres: float = 0.3):
     """
@@ -19,7 +40,8 @@ def get_sku_list(path: str, prob_thres: float = 0.3):
     result = decoder.readtext(img)
 
     # 筛选概率较高的bbox，筛选长度足够的商品名称
-    result = [(_[1], _[0]) for _ in result if _[2] > prob_thres]
+    # 对sku的名称中的一些pattern进行手工修正
+    result = [(sku_name_filter(_[1]), _[0]) for _ in result if _[2] > prob_thres]
     result = [_ for _ in result if len(_[0]) >= 4]
 
     # 只筛选是商品的文字

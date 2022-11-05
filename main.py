@@ -28,4 +28,9 @@ if __name__ == '__main__':
         input_filename = utils.get_latest_file(config.input_image_path)
 
     sku_list = ocr.get_sku_list(os.path.join(config.input_image_path, input_filename))
-    sku_process.render_sku_prices(sku_list, size=size, candidates=candidates)
+    sku_process.render_sku_prices(
+        sku_list, 
+        size=size, 
+        candidates=candidates, 
+        title=f'{os.path.basename(input_filename)} 的识别结果'
+    )

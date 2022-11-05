@@ -28,12 +28,11 @@ def parse_skus(obj: dict):
     """
     把html中的原始文档parse成格式化的sku信息
     """
-
-    item_list = obj['mods']['itemlist']
-    if 'data' not in item_list:
+    try:
+        item_list = obj['mods']['itemlist']['data']['auctions']
+    except:
+        logging.warning(f'商品网页获取出错')
         return []
-    else:
-        item_list = item_list['data']['auctions']
 
     skus = []
     for item in item_list:
@@ -66,14 +65,14 @@ def batch_get_skus(keywords: list):
 
     return result_dict
 
-def render_sku_prices(keywords: list, size: int, candidates: int):
+def render_sku_prices(keywords: list, size: int, candidates: int, title: str):
     """
     将所得的价格信息渲染到html网页上，并打开浏览器展示
     """
 
     result_dict = batch_get_skus(keywords)
 
-    html_context = renderer.render(result_dict, size=size, len_lim=candidates)
+    html_context = renderer.render(result_dict, size=size, len_lim=candidates, title=title)
     tmp_html_name = os.path.join(config.root_path, 'templates', 'tmp.html')
     with open(tmp_html_name, 'w') as fout:
         fout.write(html_context)

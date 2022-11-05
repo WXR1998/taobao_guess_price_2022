@@ -20,7 +20,10 @@ class TaobaoHTMLParser(HTMLParser):
 parser = TaobaoHTMLParser()
 
 def parse(resp: str):
-    parser.feed(resp)
-    parser.close()
+    try:
+        parser.feed(resp)
+        parser.close()
+    except:
+        return {}
 
     return parser.get_data()

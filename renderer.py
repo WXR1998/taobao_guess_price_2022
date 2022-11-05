@@ -2,7 +2,7 @@ from jinja2 import Environment, FileSystemLoader
 import os
 import config
 
-def render(result_dict: dict, size: int, len_lim: int = 10):
+def render(result_dict: dict, size: int, len_lim: int, title: str):
     def lim(l: list):
         if len(l) > len_lim:
             l = l[:len_lim]
@@ -22,7 +22,8 @@ def render(result_dict: dict, size: int, len_lim: int = 10):
                 } for s in result_dict[keyword]])
             } for keyword in result_dict
         },
-        'size': size
+        'size': size,
+        'title': title
     }
     template = env.get_template('index.html')
     return template.render(**data)
