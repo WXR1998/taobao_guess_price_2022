@@ -5,3 +5,4 @@ __pycache__/
 .vscode/
 **/tmp.html
 .DS_Store
+cookie.txt
