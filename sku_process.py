@@ -7,7 +7,7 @@ import webbrowser
 import logging
 
 import config
-import parser
+import html_parser
 import renderer
 
 
@@ -20,7 +20,7 @@ def query(keyword: str):
     query_url = config.query_url.format(keyword_encoding)
 
     resp = requests.get(query_url, headers=config.headers).text
-    obj = parser.parse(resp)
+    obj = html_parser.parse(resp)
 
     return keyword, obj
 

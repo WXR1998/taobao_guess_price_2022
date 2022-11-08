@@ -62,9 +62,7 @@ def get_sku_list(path: str, prob_thres: float = 0.3):
         x_max = int(bbox[1][0])
         y_min = int(bbox[0][1])
         y_max = int(bbox[2][1])
-        # 此坐标偏移是为了从文字的bbox获取到商品对应图片的bbox，对于不同分辨率的截图需微调此值
         y_min -= 150
-        # y_max -= 40
         cropped = img[y_min:y_max, x_min:x_max]
         if cropped.shape[0] * cropped.shape[1] > 0:
             cv2.imwrite(os.path.join(config.sku_image_path, f'{text}.jpg'), cropped)
